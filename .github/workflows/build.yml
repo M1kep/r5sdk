@@ -13,16 +13,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build Project
+      - name: Check for commits within the last 24 hours
+        uses: AlexHolderDeveloper/CommitsWithinTime@v1.1.5
+        id: commits
+        with:
+          hours: 24
+
+      - name: Set Variables
+        id: vars
         run: |
-          msbuild .\r5sdk.sln  /m:2 /t:Rebuild /p:Configuration=Release
+          echo SHA7=$(git rev-parse --short HEAD) >> $env:GITHUB_ENV
+          run: echo ::set-output name=continue::true
+
+      - name: Build Project
+        with:
+          msbuild-architecture: x64
+        run: |
+          msbuild .\r5sdk.sln  /m:2 /property:Configuration=Nightly
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts
           path: |
-            game/*.exe
-            game/*.dll
-            game/bin/*.exe
-            game/bin/x64_retail/*.dll
+            game/**/*.exe
+            game/**/*.dll
