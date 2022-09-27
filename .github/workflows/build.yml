@@ -1,0 +1,26 @@
+name: Build
+on:
+  workflow_dispatch:
+jobs:
+  build_sdk:
+    runs-on: windows-latest
+    steps:
+      - name: Setup MSBuild Dependency
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Project
+        run: |
+          msbuild .\r5sdk.sln  /m:24 /t:Rebuild /p:Configuration=Release
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            game/bin/*.exe
+            game/bin/x64_retail/*.dll
