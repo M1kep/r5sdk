@@ -29,7 +29,7 @@ jobs:
           echo ::set-output name=continue::true
 
       - name: Build Project
-        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }}
+        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }} /p:configuration=Release
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
