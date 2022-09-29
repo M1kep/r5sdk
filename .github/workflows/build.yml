@@ -4,6 +4,9 @@ on:
 jobs:
   build_sdk:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        target: [clientsdk, dedicated, gamesdk, naveditor, netconsole, sdklauncher]
     steps:
       - name: Setup MSBuild Dependency
         uses: microsoft/setup-msbuild@v1.1
@@ -26,7 +29,7 @@ jobs:
           echo ::set-output name=continue::true
 
       - name: Build Project
-        run: msbuild .\r5sdk.sln /m:2 /property:Configuration=Nightly
+        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }}
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
