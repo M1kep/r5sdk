@@ -6,7 +6,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        target: [clientsdk, dedicated, gamesdk, naveditor, netconsole, sdklauncher]
+        target: [clientsdk, dedicated, gamesdk, tools\naveditor, tools\netconsole, tools\sdklauncher]
     steps:
       - name: Setup MSBuild Dependency
         uses: microsoft/setup-msbuild@v1.1
