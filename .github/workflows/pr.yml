@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Project
-        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }} /p:configuration=Debug
+        run: msbuild .\r5sdk.sln /m /target:${{ matrix.target }} /p:configuration=Release
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
