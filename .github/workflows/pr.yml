@@ -1,0 +1,30 @@
+name: Run PR Build
+on:
+  pull_request:
+
+jobs:
+  build_pr_artifact:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        target: [ clientsdk, dedicated, gamesdk, tools\naveditor, tools\netconsole, tools\sdklauncher ]
+    steps:
+      - name: Setup MSBuild Dependency
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+          msbuild-architecture: x64
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Project
+        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }} /p:configuration=Debug
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: game-files
+          path: |
+            game/**/*.exe
+            game/**/*.dll
