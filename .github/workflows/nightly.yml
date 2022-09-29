@@ -1,6 +1,7 @@
 name: Build
 on:
   workflow_dispatch:
+
 jobs:
   build_sdk:
     runs-on: windows-latest
@@ -12,6 +13,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
         with:
           vs-prerelease: true
+          msbuild-architecture: x64
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,7 +31,7 @@ jobs:
           echo ::set-output name=continue::true
 
       - name: Build Project
-        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }} /p:configuration=Release
+        run: msbuild .\r5sdk.sln /m:2 /target:${{ matrix.target }} /p:configuration=Debug
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
